@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
-import { List } from '../list';
-import { Board } from '../board';
+import { List } from '@/list';
+import { Board } from '@/board';
 
 const router = express.Router();
 
@@ -51,6 +51,9 @@ router.delete('/:id', async (req: Request, res: Response) => {
   const listId = Number(req.params.id);
   try {
     const result = await List.delete(listId);
+    if (!result.affected) {
+      throw new Error('delete fail');
+    }
     res.json(result);
   } catch (e) {
     res.status(400).json(e);
@@ -60,9 +63,11 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const listId = req.params.id;
-    const data = await List.updateList(listId, req.body);
-
-    res.json(data);
+    const result = await List.updateList(listId, req.body);
+    if (!result.affected) {
+      throw new Error('update fail');
+    }
+    res.json(result);
   } catch (e) {
     console.log(e);
     res.status(400).json(e);

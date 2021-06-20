@@ -23,5 +23,13 @@ class Card extends TimeStamp {
 
   @ManyToMany((type) => Label, (label) => label.cards)
   labels: Label[];
+
+  static findByList(listId: number) {
+    return this.createQueryBuilder('card').leftJoinAndSelect('card.list', 'list').where('list.id = :listId', { listId }).getMany();
+  }
+
+  static updateCard(id, data) {
+    return this.createQueryBuilder('card').update(Card).set(data).where('id= :id', { id }).execute();
+  }
 }
 export default Card;
