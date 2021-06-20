@@ -4,6 +4,7 @@ import * as express from 'express';
 import { createConnection } from 'typeorm';
 import * as morgan from 'morgan';
 import { User, userRouter } from '@/user';
+import { Board, boardRouter } from '@/board';
 import { listRouter } from '@/list';
 import { cardRouter } from '@/card';
 import { labelRouter } from '@/label';
@@ -18,6 +19,7 @@ const init = async () => {
   app.use(express.json());
 
   app.use(userRouter);
+  app.use('/board', boardRouter);
   app.use('/list', listRouter);
   app.use('/card', cardRouter);
   app.use('/label', labelRouter);
