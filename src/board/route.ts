@@ -14,7 +14,6 @@ router.get('/', async (req: Request, res: Response) => {
     const { boards } = user;
     res.json(boards);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
@@ -37,7 +36,6 @@ router.post('/', async (req: Request, res: Response) => {
 
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
@@ -55,12 +53,10 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const boardId = req.params.id;
-    const target = await Board.findOneOrFail(boardId);
-    const result = await Board.delete(boardId);
-    if (!result.affected) {
-      throw new Error('delete fail');
-    }
-    res.json(target);
+
+    await Board.delete(boardId);
+
+    res.json();
   } catch (e) {
     res.status(400).json(e);
   }

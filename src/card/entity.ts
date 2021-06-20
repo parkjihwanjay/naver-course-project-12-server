@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne, JoinTable, UpdateResult } from 'typeorm';
 import { Label } from '../label';
 import { List } from '../list';
 import { TimeStamp } from '../timeStamp';
@@ -24,11 +24,11 @@ class Card extends TimeStamp {
   @ManyToMany((type) => Label, (label) => label.cards)
   labels: Label[];
 
-  static findByList(listId: number) {
+  static findByList(listId: number): Promise<Card[]> {
     return this.createQueryBuilder('card').leftJoinAndSelect('card.list', 'list').where('list.id = :listId', { listId }).getMany();
   }
 
-  static updateCard(id, data) {
+  static updateCard(id, data): Promise<UpdateResult> {
     return this.createQueryBuilder('card').update(Card).set(data).where('id= :id', { id }).execute();
   }
 }

@@ -12,6 +12,7 @@ import { cardRouter } from '@/card';
 import { labelRouter } from '@/label';
 import { baseConfig } from './config';
 import { errorMiddleWare } from './middlewares/error';
+import { verfiyJwt } from './middlewares/verifyJwt';
 
 const whiteList = ['*'];
 const app = express();
@@ -21,13 +22,17 @@ const init = async () => {
 
   app.use(morgan('common'));
   app.use(express.json());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: whiteList,
+    }),
+  );
 
-  app.use('/board', boardRouter);
-  app.use('/list', listRouter);
-  app.use('/card', cardRouter);
-  app.use('/label', labelRouter);
-  app.use(userRouter);
+  app.use('/board', verfiyJwt, boardRouter);
+  app.use('/list', verfiyJwt, listRouter);
+  app.use('/card', verfiyJwt, cardRouter);
+  app.use('/label', verfiyJwt, labelRouter);
+  app.use('/user', userRouter);
 
   app.use(errorMiddleWare);
 

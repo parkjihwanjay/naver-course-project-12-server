@@ -6,19 +6,16 @@ import { Board } from '@/board';
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
     const { boardId } = req.body;
     const result = await Label.findByBoard(boardId);
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.post('/', async (req: Request, res: Response) => {
-  console.log(req);
   const { boardId, title } = req.body;
   try {
     const newLabel = new Label();
@@ -28,21 +25,16 @@ router.post('/', async (req: Request, res: Response) => {
     const result = await newLabel.save();
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.get('/:id', async (req: Request, res: Response) => {
-  const labelId = Number(req.params.id);
-  console.log('id:', labelId);
+  const labelId = +req.params.id;
   try {
     const label = await Label.findOneOrFail({ id: labelId });
-    console.log(label);
-
     res.json(label);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
@@ -69,7 +61,6 @@ router.patch('/:id', async (req: Request, res: Response) => {
     }
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });

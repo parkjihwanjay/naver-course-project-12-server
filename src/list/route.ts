@@ -6,19 +6,16 @@ import { Board } from '@/board';
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
     const { boardId } = req.body;
     const result = await List.findByBoard(boardId);
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.post('/', async (req: Request, res: Response) => {
-  console.log(req);
   const { boardId, title } = req.body;
   try {
     const newList = new List();
@@ -28,21 +25,17 @@ router.post('/', async (req: Request, res: Response) => {
     const result = await newList.save();
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.get('/:id', async (req: Request, res: Response) => {
   const listId = Number(req.params.id);
-  console.log('id:', listId);
   try {
     const list = await List.findOneOrFail({ id: listId });
-    console.log(list);
 
     res.json(list);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
@@ -63,13 +56,12 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const listId = req.params.id;
-    const result = await List.updateList(listId, req.body);
-    if (!result.affected) {
+    const newList = await List.updateList(listId, req.body);
+    if (!newList) {
       throw new Error('update fail');
     }
-    res.json(result);
+    res.json({ list: newList });
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });

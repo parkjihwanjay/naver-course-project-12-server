@@ -5,20 +5,19 @@ import { List } from '@/list';
 
 const router = express.Router();
 
+user = req.user;
+
 router.get('/', async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
     const { listId } = req.body;
     const result = await Card.findByList(listId);
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.post('/', async (req: Request, res: Response) => {
-  console.log(req);
   const { listId, card } = req.body;
   const { title, content, date } = card;
   try {
@@ -31,21 +30,16 @@ router.post('/', async (req: Request, res: Response) => {
     const result = await newCard.save();
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
 
 router.get('/:id', async (req: Request, res: Response) => {
   const cardId = Number(req.params.id);
-  console.log('id:', cardId);
   try {
     const card = await Card.findOneOrFail({ id: cardId });
-    console.log(card);
-
     res.json(card);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
@@ -67,7 +61,6 @@ router.patch('/:id', async (req: Request, res: Response) => {
 
     res.json(result);
   } catch (e) {
-    console.log(e);
     res.status(400).json(e);
   }
 });
