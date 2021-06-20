@@ -22,9 +22,5 @@ class Label extends TimeStamp {
   static findByBoard(boardId: number): Promise<Label[]> {
     return this.createQueryBuilder('label').leftJoinAndSelect('label.board', 'board').where('board.id = :boardId', { boardId }).getMany();
   }
-
-  static updateLabel(id: string, data: Label): Promise<UpdateResult> {
-    return this.createQueryBuilder('label').update(Label).set(data).where('id= :id', { id }).execute();
-  }
 }
 export default Label;

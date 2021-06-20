@@ -25,3 +25,5 @@ export class User extends TimeStamp {
     });
   }
 }
+
+export default User;

@@ -66,9 +66,13 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const boardId = req.params.id;
-    const data = req.body;
     const target = await Board.findOneOrFail(boardId);
-    const result = await target.save(data);
+
+    const { imgUrl, lists } = req.body;
+    if (imgUrl) target.imgUrl = imgUrl;
+    if (lists) target.lists = lists;
+
+    const result = await target.save();
     res.json(result);
   } catch (e) {
     res.status(400).json(e);
