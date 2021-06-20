@@ -15,13 +15,14 @@ import { baseConfig } from './config';
 import { errorMiddleWare } from './middlewares/error';
 import { verfiyJwt } from './middlewares/verifyJwt';
 import { authConfig } from './config/index';
+import { boardAuthCheck, listAuthCheck, cardAuthCheck, labelAuthCheck } from './middlewares/authCheck';
 
 const whiteList = ['*'];
 const app = express();
 
 const init = async () => {
   const connection = await createConnection();
-
+  ``;
   app.use(morgan('common'));
   app.use(express.json());
   app.use(
@@ -31,10 +32,10 @@ const init = async () => {
   );
 
   // req.user를 자동으로 넣어준다.
-  app.use('/board', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), boardRouter);
-  app.use('/list', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), listRouter);
-  app.use('/card', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), cardRouter);
-  app.use('/label', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), labelRouter);
+  app.use('/board', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), boardAuthCheck, boardRouter);
+  app.use('/list', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), listAuthCheck, listRouter);
+  app.use('/card', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), cardAuthCheck, cardRouter);
+  app.use('/label', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), labelAuthCheck, labelRouter);
   app.use('/user', userRouter);
 
   app.use(errorMiddleWare);
