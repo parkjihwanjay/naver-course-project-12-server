@@ -9,9 +9,7 @@ const router = express.Router();
 // 특정 user의 board read
 router.get('/', async (req: Request, res: Response) => {
   try {
-    // const { email } = req.body;
-    // const user = await User.findOneOrFail({ email });
-    const user = await findUserByEmail(req.user.id);
+    const user = await findUserByEmail(req.auth.email);
     const { boards } = user;
     res.json(boards);
   } catch (e) {
@@ -21,23 +19,29 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { email, board } = req.body;
-    const { imgUrl } = board;
-    const user = await User.findOneOrFail({ email });
+    const { imgUrl } = req.body;
+    // const user = await User.findOneOrFail(email);
+    const user = new User();
+    user.email = 'cc6656@naver.com';
+    user.id = 'asdf';
+    const newUser = await user.save();
+
     const newBoard = new Board();
     newBoard.imgUrl = imgUrl;
-    newBoard.users.push(user);
+    newBoard.users = [user];
     const result = await newBoard.save();
-
+    // console.log(result);
     const boardUser = new BoardUser();
     boardUser.boardId = result.id;
-    boardUser.userEmail = user.email;
+    boardUser.userEmail = newUser.email;
     boardUser.status = 'read';
     await boardUser.save();
 
-    res.json(result);
+    // res.json(result);
+    res.json({});
   } catch (e) {
-    res.status(400).json(e);
+    console.log(e);
+    res.status(400).json({ e });
   }
 });
 

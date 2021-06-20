@@ -1,7 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne, JoinTable, UpdateResult } from 'typeorm';
-import { Label } from '../label';
-import { List } from '../list';
-import { TimeStamp } from '../timeStamp';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+  ManyToOne,
+  JoinTable,
+  UpdateResult,
+  JoinColumn,
+} from 'typeorm';
+import Label from '@/label/entity';
+import List from '@/list/entity';
+import TimeStamp from '@/timeStamp/entity';
 
 @Entity()
 class Card extends TimeStamp {
@@ -18,7 +29,7 @@ class Card extends TimeStamp {
   date: string;
 
   @ManyToOne((type) => List, (list) => list.cards)
-  @JoinTable()
+  @JoinColumn()
   list: List;
 
   @ManyToMany((type) => Label, (label) => label.cards)

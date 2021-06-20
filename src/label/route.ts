@@ -56,8 +56,10 @@ router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const labelId = req.params.id;
     const target = await Label.findOneOrFail(labelId);
-    const { title } = req.body;
+    const { title, color } = req.body;
+
     if (title) target.title = title;
+    if (color) target.color = color;
 
     const result = await target.save();
     res.json(result);

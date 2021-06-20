@@ -1,15 +1,15 @@
 import { Entity, Column, PrimaryColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
-import { Board } from '@/entity/Board';
-import { BoardUser } from '@/entity/BoardUser';
-import { TimeStamp } from '@/entity/TimeStamp';
+import Board from '@/board/entity';
+import BoardUser from '@/boardUser/entity';
+import TimeStamp from '@/timeStamp/entity';
 
 @Entity()
-export class User extends TimeStamp {
+class User extends TimeStamp {
   @PrimaryColumn()
   email: string;
 
   @Column()
-  name: string;
+  id: string;
 
   @ManyToOne((type) => BoardUser, (boardUser) => boardUser.userEmail)
   @JoinTable()

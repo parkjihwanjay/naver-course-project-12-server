@@ -1,9 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
-import { User } from '../user';
-import { BoardUser } from '../boardUser';
-import { List } from '../list';
-import { Label } from '../label';
-import { TimeStamp } from '../timeStamp';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
+import User from '@/user/entity';
+import BoardUser from '@/boardUser/entity';
+import List from '@/list/entity';
+import Label from '@/label/entity';
+import TimeStamp from '@/timeStamp/entity';
 
 @Entity()
 class Board extends TimeStamp {
@@ -14,11 +25,11 @@ class Board extends TimeStamp {
   imgUrl: string;
 
   @OneToMany((type) => Label, (label) => label.board)
-  @JoinTable()
+  @JoinColumn()
   labels: Label[];
 
   @OneToMany((type) => List, (list) => list.board)
-  @JoinTable()
+  @JoinColumn()
   lists: List[];
 
   @ManyToMany((type) => User, (user) => user.boards)
@@ -26,7 +37,7 @@ class Board extends TimeStamp {
   users: User[];
 
   @ManyToOne((type) => BoardUser, (boardUser) => boardUser.boardId)
-  @JoinTable()
+  @JoinColumn()
   boardUsers: BoardUser[];
 }
 export default Board;

@@ -9,9 +9,8 @@ router.get('/naver_auth', async (req: Request, res: Response, next: NextFunction
   try {
     const { email, id } = await getNaverProfile(authorization);
     const user = await findUserByEmail(email);
-
     let finalUser = user;
-    if (!user) {
+    if (!finalUser) {
       finalUser = await signup(email, id);
     }
     const jwtToken = signJwt(finalUser);

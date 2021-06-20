@@ -1,8 +1,7 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinTable, OneToMany, UpdateResult } from 'typeorm';
-import { Board } from '@/entity/Board';
-import { Card } from '@/entity/Card';
-import { TimeStamp } from '@/entity/TimeStamp';
-import { title } from 'process';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn, ManyToOne, JoinTable, OneToMany, UpdateResult, JoinColumn } from 'typeorm';
+import Board from '@/board/entity';
+import Card from '@/card/entity';
+import TimeStamp from '@/timeStamp/entity';
 
 @Entity()
 class List extends TimeStamp {
@@ -13,11 +12,11 @@ class List extends TimeStamp {
   title: string;
 
   @OneToMany((type) => Card, (card) => card.list)
-  @JoinTable()
+  @JoinColumn()
   cards: Card[];
 
   @ManyToOne((type) => Board, (board) => board.lists)
-  @JoinTable()
+  @JoinColumn()
   board: Board;
 
   static findByBoard(boardId: number): Promise<List[]> {

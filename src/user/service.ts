@@ -21,17 +21,17 @@ export const getNaverProfile = async (token: string): Promise<{ email: string; i
 };
 
 export const signJwt = (user: User): string => {
-  return jwt.sign(user, authConfig.jwtSecretKey);
+  return jwt.sign({ user }, authConfig.jwtSecretKey);
 };
 
 export const findUserByEmail = (email: string): Promise<User> => {
   return User.findByEmail(email);
 };
 
-export const signup = async (email: string, name: string): Promise<User> => {
+export const signup = async (email: string, id: string): Promise<User> => {
   const user = new User();
   user.email = email;
-  user.name = name;
+  user.id = id;
   await user.save();
   return user;
 };
