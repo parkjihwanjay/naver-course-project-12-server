@@ -55,10 +55,11 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const labelId = req.params.id;
-    const result = await Label.updateLabel(labelId, req.body);
-    if (!result.affected) {
-      throw new Error('update fail');
-    }
+    const target = await Label.findOneOrFail(labelId);
+    const { title } = req.body;
+    if (title) target.title = title;
+
+    const result = await target.save();
     res.json(result);
   } catch (e) {
     res.status(400).json(e);

@@ -56,11 +56,12 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const listId = req.params.id;
-    const newList = await List.updateList(listId, req.body);
-    if (!newList) {
-      throw new Error('update fail');
-    }
-    res.json({ list: newList });
+    const target = await List.findOneOrFail(listId);
+    const { title, cards } = req.body;
+    if (title) target.title = title;
+    if (cards) target.cards = cards;
+    const result = await target.save();
+    res.json(result);
   } catch (e) {
     res.status(400).json(e);
   }

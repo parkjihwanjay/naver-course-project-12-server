@@ -23,17 +23,6 @@ class List extends TimeStamp {
   static findByBoard(boardId: number): Promise<List[]> {
     return this.createQueryBuilder('list').leftJoinAndSelect('list.board', 'board').where('board.id = :boardId', { boardId }).getMany();
   }
-
-  static async updateList(id, data: List): Promise<UpdateResult> {
-    // const list = await List.findOne({ id });
-    // list.id = data.id;
-    // list.title = data.title;
-    // list.cards = data.cards;
-    // list.board = data.board;
-    // await list.save();
-    // return list;
-    return this.createQueryBuilder('list').update(List).set(data).where('id= :id', { id }).execute();
-  }
 }
 
 export default List;

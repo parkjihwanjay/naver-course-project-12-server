@@ -55,7 +55,15 @@ router.delete('/:id', async (req: Request, res: Response) => {
 router.patch('/:id', async (req: Request, res: Response) => {
   try {
     const cardId = req.params.id;
-    const result = await Card.updateCard(cardId, req.body);
+    const target = await Card.findOneOrFail(cardId);
+    const { title, content, date, labels } = req.body;
+
+    if (title) target.title = title;
+    if (content) target.content = content;
+    if (date) target.date = date;
+    if (labels) target.labels = labels;
+
+    const result = await target.save();
 
     res.json(result);
   } catch (e) {
