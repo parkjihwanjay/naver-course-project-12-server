@@ -7,8 +7,7 @@ import { NextFunction, request, Request, Response } from 'express';
 
 export const boardAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): void => {
   try {
-    const { email } = req.user;
-    const user = await User.findOneOrFail(email);
+    const { user } = req;
     if (!req.params) {
       // if no params, no need to check authorization.
       next();
@@ -26,8 +25,7 @@ export const boardAuthCheck = async (err: Error, req: Request, res: Response, ne
 
 export const listAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): void => {
   try {
-    const { email } = req.user;
-    const user = await User.findOneOrFail(email);
+    const { user } = req;
 
     if (!request.params) {
       // get all list of a board
@@ -51,8 +49,7 @@ export const listAuthCheck = async (err: Error, req: Request, res: Response, nex
 
 export const cardAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): void => {
   try {
-    const { email } = req.user;
-    const user = await User.findOneOrFail(email);
+    const { user } = req;
 
     if (!request.params) {
       // get all card or create new card of a list
@@ -76,8 +73,7 @@ export const cardAuthCheck = async (err: Error, req: Request, res: Response, nex
 
 export const labelAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): void => {
   try {
-    const { email } = req.user;
-    const user = await User.findOneOrFail(email);
+    const { user } = req;
 
     if (!request.params) {
       // get all label or create new label of a board
