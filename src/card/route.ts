@@ -5,8 +5,6 @@ import { List } from '@/list';
 
 const router = express.Router();
 
-user = req.user;
-
 router.get('/', async (req: Request, res: Response) => {
   try {
     const { listId } = req.body;

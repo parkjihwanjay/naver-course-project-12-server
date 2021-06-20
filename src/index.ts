@@ -13,6 +13,7 @@ import { labelRouter } from '@/label';
 import { baseConfig } from './config';
 import { errorMiddleWare } from './middlewares/error';
 import { verfiyJwt } from './middlewares/verifyJwt';
+import { boardAuthCheck, listAuthCheck, cardAuthCheck, labelAuthCheck } from './middlewares/authCheck';
 
 const whiteList = ['*'];
 const app = express();
@@ -28,10 +29,10 @@ const init = async () => {
     }),
   );
 
-  app.use('/board', verfiyJwt, boardRouter);
-  app.use('/list', verfiyJwt, listRouter);
-  app.use('/card', verfiyJwt, cardRouter);
-  app.use('/label', verfiyJwt, labelRouter);
+  app.use('/board', verfiyJwt, boardAuthCheck, boardRouter);
+  app.use('/list', verfiyJwt, listAuthCheck, listRouter);
+  app.use('/card', verfiyJwt, cardAuthCheck, cardRouter);
+  app.use('/label', verfiyJwt, labelAuthCheck, labelRouter);
   app.use('/user', userRouter);
 
   app.use(errorMiddleWare);
