@@ -6,6 +6,7 @@ import * as morgan from 'morgan';
 import { User, userRouter } from '@/user';
 import { listRouter } from '@/list';
 import { cardRouter } from '@/card';
+import { labelRouter } from '@/label';
 import { baseConfig } from './config';
 
 const app = express();
@@ -19,6 +20,7 @@ const init = async () => {
   app.use(userRouter);
   app.use('/list', listRouter);
   app.use('/card', cardRouter);
+  app.use('/label', labelRouter);
   app.get('/', (req, res) => {
     const user = new User();
     res.json(user);
