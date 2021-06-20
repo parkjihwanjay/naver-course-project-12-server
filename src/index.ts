@@ -1,8 +1,9 @@
-import express from 'express';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import { User } from './entity/User';
 
-const app = express();
-const port = 5000;
-app.get('/', (_, res) => {
-  res.status(200).send();
-});
-app.listen(port, () => console.log(`Running on port ${port}`));
+createConnection()
+  .then(async (connection) => {
+    console.log('connection succed');
+  })
+  .catch((error) => console.log(error));
