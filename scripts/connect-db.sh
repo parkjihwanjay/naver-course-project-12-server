@@ -1,0 +1,1 @@
+docker exec -it trello12 psql -U trello12 -W trello12 trello12
