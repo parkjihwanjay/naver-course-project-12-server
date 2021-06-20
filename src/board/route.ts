@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
-import { User } from '@/user';
+import { User, findUserByEmail } from '@/user';
 import { Board } from '@/board';
 import { BoardUser } from '@/boardUser';
 
@@ -9,8 +9,9 @@ const router = express.Router();
 // 특정 user의 board read
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { email } = req.body;
-    const user = await User.findOneOrFail({ email });
+    // const { email } = req.body;
+    // const user = await User.findOneOrFail({ email });
+    const user = await findUserByEmail(req.user.id);
     const { boards } = user;
     res.json(boards);
   } catch (e) {

@@ -19,19 +19,9 @@ export class User extends TimeStamp {
   @JoinTable()
   boards: Board[];
 
-  static async findUserByEmail(email: string): Promise<User> {
+  static async findByEmail(email: string): Promise<User> {
     return User.findOne({
       email,
     });
   }
-
-  static async signup(email: string, name: string): Promise<User> {
-    const user = new User();
-    user.email = email;
-    user.name = name;
-    await user.save();
-    return user;
-  }
 }
-
-};

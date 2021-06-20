@@ -14,7 +14,7 @@ router.get('/naver_auth', async (req: Request, res: Response, next: NextFunction
     if (!user) {
       finalUser = await signup(email, id);
     }
-    const jwtToken = signJwt(finalUser.email);
+    const jwtToken = signJwt(finalUser);
     res.json({
       finalUser,
       jwtToken,

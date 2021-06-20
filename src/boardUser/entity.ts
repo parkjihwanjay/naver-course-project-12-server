@@ -20,8 +20,8 @@ class BoardUser extends TimeStamp {
   @Column()
   status: TStatus;
 
-  static find(userEmail: string, boardId: string): Promise<BoardUser> {
-    return BoardUser.find(userEmail, boardId);
+  static findByEmailAndBoardId(userEmail: string, boardId: string): Promise<BoardUser> {
+    return BoardUser.findOne({ where: { userEmail, boardId } });
   }
 }
 export default BoardUser;

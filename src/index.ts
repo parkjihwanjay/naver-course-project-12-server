@@ -10,9 +10,11 @@ import { Board, boardRouter } from '@/board';
 import { listRouter } from '@/list';
 import { cardRouter } from '@/card';
 import { labelRouter } from '@/label';
+import * as jwt from 'express-jwt';
 import { baseConfig } from './config';
 import { errorMiddleWare } from './middlewares/error';
 import { verfiyJwt } from './middlewares/verifyJwt';
+import { authConfig } from './config/index';
 
 const whiteList = ['*'];
 const app = express();
@@ -28,10 +30,11 @@ const init = async () => {
     }),
   );
 
-  app.use('/board', verfiyJwt, boardRouter);
-  app.use('/list', verfiyJwt, listRouter);
-  app.use('/card', verfiyJwt, cardRouter);
-  app.use('/label', verfiyJwt, labelRouter);
+  // req.user를 자동으로 넣어준다.
+  app.use('/board', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), boardRouter);
+  app.use('/list', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), listRouter);
+  app.use('/card', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), cardRouter);
+  app.use('/label', jwt({ secret: authConfig.jwtSecretKey, algorithms: ['HS256'] }), labelRouter);
   app.use('/user', userRouter);
 
   app.use(errorMiddleWare);
