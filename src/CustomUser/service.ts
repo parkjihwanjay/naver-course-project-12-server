@@ -21,7 +21,7 @@ export const getNaverProfile = async (token: string): Promise<{ email: string; i
 };
 
 export const signJwt = (user: CustomUser): string => {
-  return jwt.sign({ user }, authConfig.jwtSecretKey);
+  return jwt.sign({ user }, authConfig.jwtSecretKey, { expiresIn: '10 days' });
 };
 
 export const findUserByEmail = (email: string): Promise<CustomUser> => {

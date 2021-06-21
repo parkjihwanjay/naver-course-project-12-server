@@ -1,4 +1,8 @@
 import User from '@/CustomUser/entity';
+import { Board } from '@/board';
+import { List } from '@/list';
+import { Card } from '@/card';
+import { Label } from '@/label';
 
 declare class CustomUser extends User {}
 
@@ -10,6 +14,10 @@ declare global {
         id: string;
       };
       auth?: CustomUser;
+      board?: Board;
+      list?: List;
+      card?: Card;
+      label?: Label;
     }
   }
 }

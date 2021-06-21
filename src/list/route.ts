@@ -23,7 +23,8 @@ router.post('/', async (req: Request, res: Response) => {
     newList.board = board;
     newList.title = title;
     const result = await newList.save();
-    res.json(result);
+    const list = await List.getAllNested(result.id);
+    res.json(list);
   } catch (e) {
     res.status(400).json(e);
   }

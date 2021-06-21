@@ -15,12 +15,20 @@ class List extends TimeStamp {
   @JoinColumn()
   cards: Card[];
 
-  @ManyToOne((type) => Board, (board) => board.lists)
+  @ManyToOne((type) => Board, (board) => board.lists, { onDelete: 'CASCADE' })
   @JoinColumn()
   board: Board;
 
   static findByBoard(boardId: number): Promise<List[]> {
-    return this.createQueryBuilder('list').leftJoinAndSelect('list.board', 'board').where('board.id = :boardId', { boardId }).getMany();
+    return this.createQueryBuilder('board')
+      .leftJoinAndSelect('borad.lists', 'list')
+      .leftJoinAndSelect('list.cards', 'card')
+      .where('board.id = :boardId', { boardId })
+      .getMany();
+  }
+
+  static getAllNested(listId: number): Promise<List> {
+    return this.createQueryBuilder('list').where('list.id = :listId', { listId }).leftJoinAndSelect('list.cards', 'card').getOne();
   }
 }
 

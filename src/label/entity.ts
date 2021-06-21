@@ -29,7 +29,7 @@ class Label extends TimeStamp {
   @JoinTable()
   cards: Card[];
 
-  @ManyToOne((type) => Board, (board) => board.labels)
+  @ManyToOne((type) => Board, (board) => board.labels, { onDelete: 'CASCADE' })
   @JoinColumn()
   board: Board;
 

@@ -45,8 +45,8 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   const cardId = Number(req.params.id);
   try {
-    const result = await Card.delete(cardId);
-    res.json(result);
+    await Card.delete(cardId);
+    res.json(cardId);
   } catch (e) {
     res.status(400).json(e);
   }

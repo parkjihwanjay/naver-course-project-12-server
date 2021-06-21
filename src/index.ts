@@ -29,6 +29,7 @@ const init = async () => {
 
   // req.user를 자동으로 넣어준다.
   app.use('/board', verfiyJwt, getUser, boardAuthCheck, boardRouter);
+
   app.use('/list', verfiyJwt, getUser, listAuthCheck, listRouter);
   app.use('/card', verfiyJwt, getUser, cardAuthCheck, cardRouter);
   app.use('/label', verfiyJwt, getUser, labelAuthCheck, labelRouter);

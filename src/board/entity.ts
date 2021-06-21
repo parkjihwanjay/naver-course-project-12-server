@@ -15,7 +15,7 @@ import User from '@/CustomUser/entity';
 import List from '@/list/entity';
 import Label from '@/label/entity';
 import TimeStamp from '@/timeStamp/entity';
-import { BoardUser } from '@/boardUser';
+// import { BoardUser } from '@/boardUser';
 
 @Entity()
 class Board extends TimeStamp {
@@ -33,10 +33,17 @@ class Board extends TimeStamp {
   @JoinColumn()
   lists: List[];
 
-  // @ManyToMany((type) => User, (user) => user.boards)
-  // users: User[];
+  @ManyToMany((type) => User, (user) => user.boards)
+  @JoinColumn()
+  users: User[];
 
-  @OneToMany((type) => BoardUser, (boardUsers) => boardUsers.board)
-  boardUsers: BoardUser[];
+  static getAllNested(boardId: number): Promise<Board> {
+    return this.createQueryBuilder('board')
+      .where('board.id = :boardId', { boardId })
+      .leftJoinAndSelect('board.lists', 'list')
+      .leftJoinAndSelect('list.cards', 'card')
+      .leftJoinAndSelect('board.labels', 'label')
+      .getOne();
+  }
 }
 export default Board;

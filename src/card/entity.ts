@@ -1,15 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
-  ManyToOne,
-  JoinTable,
-  UpdateResult,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 import Label from '@/label/entity';
 import List from '@/list/entity';
 import TimeStamp from '@/timeStamp/entity';
@@ -28,7 +17,7 @@ class Card extends TimeStamp {
   @Column('date')
   date: string;
 
-  @ManyToOne((type) => List, (list) => list.cards)
+  @ManyToOne((type) => List, (list) => list.cards, { onDelete: 'CASCADE' })
   @JoinColumn()
   list: List;
 

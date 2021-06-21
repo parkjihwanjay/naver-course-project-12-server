@@ -4,44 +4,29 @@ import { Card } from '@/card';
 import { User } from '@/CustomUser';
 import { Label } from '@/label';
 import { NextFunction, request, Request, Response } from 'express';
+import { checkEmptyObject } from '../utils/object';
 
-export const boardAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const boardAuthCheck = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // if (!req.params) {
-    //   // if no params, no need to check authorization.
-    //   next();
-    // }
-    // const { auth } = req;
-    // if (!auth) throw new Error('no user');
-    // const boardId = req.params.id;
-    // const board = await Board.findOneOrFail(boardId);
-    // if (board.users.indexOf(auth) < 0) {
-    //   throw new Error('no authorization');
-    // }
+    if (!checkEmptyObject(req.params)) return next();
+    const { auth } = req;
+    if (!auth) throw new Error('no user');
     next();
   } catch (e) {
     next(e);
   }
 };
 
-export const listAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const listAuthCheck = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    if (!checkEmptyObject(req.params)) return next();
     const { auth } = req;
-    if (!request.params) {
-      // get all list of a board
-      const { boardId } = req.body;
-      // const board = await Board.findOneOrFail(boardId);
-      const users = await Board.find({ relations: ['users'], where: { id: boardId } });
-      if (board.users.indexOf(auth) < 0) {
-        throw new Error('no authorization');
-      }
-    }
     const listId = req.params.id;
     const list = await List.findOneOrFail(listId);
     const { board } = list;
-    if (board.users.indexOf(auth) < 0) {
-      throw new Error('no authorization');
-    }
+    const targetBoard = auth.boards.find((el) => el.id === board.id);
+    if (!targetBoard) throw new Error('no authorization');
+    req.list = list;
     next();
   } catch (e) {
     next(e);
@@ -50,21 +35,19 @@ export const listAuthCheck = async (err: Error, req: Request, res: Response, nex
 
 export const cardAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    if (!checkEmptyObject(req.params)) return next();
+
     const { auth } = req;
-    if (!request.params) {
-      // get all card or create new card of a list
-      const { listId } = req.body;
-      const list = await List.findOneOrFail(listId);
-      if (list.board.users.indexOf(auth) < 0) {
-        throw new Error('no authorization');
-      }
-    }
     const cardId = req.params.id;
     const card = await Card.findOneOrFail(cardId);
-    const { board } = card.list;
-    if (board.users.indexOf(auth) < 0) {
-      throw new Error('no authorization');
-    }
+    req.card = card;
+
+    const { listId } = req.body;
+    if (!listId) return next();
+
+    const list = await List.findOneOrFail(listId);
+    const owner = list.board.users.find((user) => user.email === auth.email);
+    if (!owner) throw new Error('no authorization');
     next();
   } catch (e) {
     next(e);
@@ -73,21 +56,20 @@ export const cardAuthCheck = async (err: Error, req: Request, res: Response, nex
 
 export const labelAuthCheck = async (err: Error, req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { auth } = req;
-    if (!request.params) {
-      // get all label or create new label of a board
-      const { boardId } = req.body;
-      const board = await Board.findOneOrFail(boardId);
-      if (board.users.indexOf(auth) < 0) {
-        throw new Error('no authorization');
-      }
-    }
+    if (!checkEmptyObject(request.params)) return next();
+
     const labelId = req.params.id;
     const label = await Label.findOneOrFail(labelId);
-    const { board } = label;
-    if (board.users.indexOf(auth) < 0) {
-      throw new Error('no authorization');
-    }
+
+    req.label = label;
+
+    const { boardId } = req.body;
+    if (!boardId) return next();
+
+    const { auth } = req;
+    const board = await Board.findOneOrFail(boardId);
+    const owner = board.users.find((user) => user.email === auth.email);
+    if (!owner) throw new Error('no authorization');
     next();
   } catch (e) {
     next(e);
