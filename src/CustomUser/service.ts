@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 import { authConfig } from '@/config';
-import { User } from './entity';
+import CustomUser from './entity';
 
 const apiUrl = {
   naver: {
@@ -20,16 +20,16 @@ export const getNaverProfile = async (token: string): Promise<{ email: string; i
   return { email, id };
 };
 
-export const signJwt = (user: User): string => {
+export const signJwt = (user: CustomUser): string => {
   return jwt.sign({ user }, authConfig.jwtSecretKey);
 };
 
-export const findUserByEmail = (email: string): Promise<User> => {
-  return User.findByEmail(email);
+export const findUserByEmail = (email: string): Promise<CustomUser> => {
+  return CustomUser.findByEmail(email);
 };
 
-export const signup = async (email: string, id: string): Promise<User> => {
-  const user = new User();
+export const signup = async (email: string, id: string): Promise<CustomUser> => {
+  const user = new CustomUser();
   user.email = email;
   user.id = id;
   await user.save();

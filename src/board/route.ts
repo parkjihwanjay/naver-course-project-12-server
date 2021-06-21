@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
-import { User, findUserByEmail } from '@/user';
+import { User, findUserByEmail } from '@/CustomUser';
 import { Board } from '@/board';
 import { BoardUser } from '@/boardUser';
 
@@ -21,21 +21,22 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const { imgUrl } = req.body;
     // const user = await User.findOneOrFail(email);
+    const board = new Board();
+    board.imgUrl = imgUrl;
+    const newBoard = await board.save();
+    console.log(newBoard);
+
     const user = new User();
     user.email = 'cc6656@naver.com';
     user.id = 'asdf';
+    user.boards = [newBoard];
     const newUser = await user.save();
 
-    const newBoard = new Board();
-    newBoard.imgUrl = imgUrl;
-    newBoard.users = [user];
-    const result = await newBoard.save();
-    // console.log(result);
     const boardUser = new BoardUser();
-    boardUser.boardId = result.id;
-    boardUser.userEmail = newUser.email;
-    boardUser.status = 'read';
-    await boardUser.save();
+    boardUser.board = newBoard;
+    boardUser.user = newUser;
+    const newBoardUser = await boardUser.save();
+    console.log(newBoardUser);
 
     // res.json(result);
     res.json({});

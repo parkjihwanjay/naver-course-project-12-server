@@ -1,4 +1,4 @@
-import User from '@/user/entity';
+import User from '@/CustomUser/entity';
 
 declare class CustomUser extends User {}
 

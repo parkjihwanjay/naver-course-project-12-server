@@ -10,11 +10,12 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import User from '@/user/entity';
-import BoardUser from '@/boardUser/entity';
+import User from '@/CustomUser/entity';
+// import BoardUser from '@/boardUser/entity';
 import List from '@/list/entity';
 import Label from '@/label/entity';
 import TimeStamp from '@/timeStamp/entity';
+import { BoardUser } from '@/boardUser';
 
 @Entity()
 class Board extends TimeStamp {
@@ -32,12 +33,10 @@ class Board extends TimeStamp {
   @JoinColumn()
   lists: List[];
 
-  @ManyToMany((type) => User, (user) => user.boards)
-  @JoinTable()
-  users: User[];
+  // @ManyToMany((type) => User, (user) => user.boards)
+  // users: User[];
 
-  @ManyToOne((type) => BoardUser, (boardUser) => boardUser.boardId)
-  @JoinColumn()
+  @OneToMany((type) => BoardUser, (boardUsers) => boardUsers.board)
   boardUsers: BoardUser[];
 }
 export default Board;

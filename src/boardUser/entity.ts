@@ -1,6 +1,6 @@
-import { Entity, Column, JoinTable, PrimaryColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, JoinTable, PrimaryColumn, OneToMany, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 import Board from '@/board/entity';
-import User from '@/user/entity';
+import User from '@/CustomUser/entity';
 import TimeStamp from '@/timeStamp/entity';
 
 type TStatus = 'read' | 'write' | 'update' | 'delete';
@@ -8,14 +8,12 @@ type TStatus = 'read' | 'write' | 'update' | 'delete';
 @Entity()
 class BoardUser extends TimeStamp {
   @PrimaryColumn()
-  @OneToMany((type) => Board, (board) => board.boardUsers)
-  @JoinColumn()
-  boardId: number;
+  @ManyToOne((type) => Board, (board) => board.boardUsers)
+  board: Board;
 
   @PrimaryColumn()
-  @OneToMany((type) => User, (user) => user.boardUsers)
-  @JoinColumn()
-  userEmail: string;
+  @ManyToOne((type) => User, (user) => user.boardUsers)
+  user: User;
 
   @Column()
   status: TStatus;

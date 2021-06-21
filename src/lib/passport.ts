@@ -2,7 +2,7 @@
 
 import { Strategy as NaverStrategy } from 'passport-naver';
 import * as passport from 'passport';
-import { findUserByEmail, signup } from '@/user';
+import { findUserByEmail, signup } from '@/CustomUser';
 import { naverConfig } from '../config';
 
 passport.use(

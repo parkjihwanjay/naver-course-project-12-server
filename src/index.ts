@@ -3,7 +3,7 @@ import * as express from 'express';
 
 import { createConnection } from 'typeorm';
 import * as morgan from 'morgan';
-import { User, userRouter } from '@/user';
+import { User, userRouter } from '@/CustomUser';
 // import { User } from './entity/User';
 import * as cors from 'cors';
 import { Board, boardRouter } from '@/board';

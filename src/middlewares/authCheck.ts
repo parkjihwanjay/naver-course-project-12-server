@@ -1,7 +1,7 @@
 import { Board } from '@/board';
 import { List } from '@/list';
 import { Card } from '@/card';
-import { User } from '@/user';
+import { User } from '@/CustomUser';
 import { Label } from '@/label';
 import { NextFunction, request, Request, Response } from 'express';
 
@@ -30,7 +30,8 @@ export const listAuthCheck = async (err: Error, req: Request, res: Response, nex
     if (!request.params) {
       // get all list of a board
       const { boardId } = req.body;
-      const board = await Board.findOneOrFail(boardId);
+      // const board = await Board.findOneOrFail(boardId);
+      const users = await Board.find({ relations: ['users'], where: { id: boardId } });
       if (board.users.indexOf(auth) < 0) {
         throw new Error('no authorization');
       }

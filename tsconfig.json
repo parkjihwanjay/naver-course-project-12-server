@@ -10,12 +10,12 @@
           "./*"
         ]
       },
+      "emitDecoratorMetadata" : true,
       "typeRoots": ["./node_modules/@types","./src/customType/express.d.ts"], 
       "target": "es5",
       "module": "commonjs",
       "moduleResolution": "node",
       "outDir": "./build",
-      "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true
    }

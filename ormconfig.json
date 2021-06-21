@@ -7,8 +7,16 @@
    "database": "trello12",
    "synchronize": true,
    "logging": false,
+   "emitDecoratorMetadata" : true,
    "entities": [
-      "src/**/entity.ts"
+      "src/**/entity.ts",
+      "src/board/entity.ts",
+      "src/boardUser/entity.ts",
+      "src/card/entity.ts",
+      "src/label/entity.ts",
+      "src/list/entity.ts",
+      "src/timeStamp/entity.ts",
+      "src/user/entity.ts"
    ],
    "migrations": [
       "src/migration/**/*.ts"
