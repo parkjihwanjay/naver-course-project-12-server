@@ -24,10 +24,13 @@ router.post('/', async (req: Request, res: Response) => {
     board.imgUrl = imgUrl;
     const newBoard = await board.save();
 
-    const user = new User();
-    user.email = 'cc6656@naver.com';
-    user.id = 'asdf';
-    user.boards = [newBoard];
+    const { auth } = req;
+    const user = await User.findOneOrFail(auth.email, { relations: ['boards'] });
+    if (!user.boards) user.boards = [newBoard];
+    else user.boards.push(newBoard);
+    // user.email = 'cc6656@naver.com';
+    // user.id = 'asdf';
+    // user.boards = [newBoard];
     await user.save();
 
     res.json({ board: newBoard });
@@ -42,6 +45,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const boardId = req.params.id;
     const board = await Board.getAllNested(+boardId);
     console.log(board);
+    console.log(auth);
     const index = auth.boards.findIndex((el) => el.id === board.id);
     if (index < 0) throw new Error('no authorization');
     res.json(board);
